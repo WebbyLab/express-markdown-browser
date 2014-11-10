@@ -21,7 +21,7 @@ marked.setOptions({
 module.exports = function(args){
     var dir = args.path;
     if(!dir) throw "Path required!";
-    var css = fs.readFileSync("./css/def.css", 'utf8');
+    var css = fs.readFileSync(__dirname + "/style/def.css", 'utf8');
 
     return function(req, res, next){
 
