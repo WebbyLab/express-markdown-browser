@@ -1,0 +1,17 @@
+{
+  "name": "express-markdown-browser",
+  "version": "0.0.1",
+  "description": "",
+  "author": {
+    "name": "webbylab"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:siavolt/express-markdown-browser.git"
+  },
+  "devDependencies": {
+    "marked":       "*",
+    "highlight.js": "*"
+  }
+}
