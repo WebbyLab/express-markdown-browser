@@ -67,8 +67,7 @@ module.exports = function(args){
                 if ( typeof list[key] == "object" ){
                     html += renderList(list[key], key, url);
                 } else {
-
-                    html += '<li><a href="'+url+'/'+list[key]+'">' + key + "</a></li>";
+                    html += '<li><a href="'+url+'/'+list[key]+'">' + key.replace(/\..*/, "") + "</a></li>";
                 }
             }
             html += "</ul>";
