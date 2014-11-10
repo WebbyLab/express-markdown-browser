@@ -25,7 +25,7 @@ module.exports = function(args){
 
     return function(req, res, next){
 
-        if ((/\/apidoc.*?\.md/).test(req.url)){
+        if ((/\.md/).test(req.url)){
             var md;
             try {
                 md = fs.readFileSync("." + req.url, 'utf8');
