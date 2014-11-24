@@ -2,7 +2,7 @@
   font-family: 'PT Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('PT Sans'), local('PTSans-Regular'), url(fonts/PT_Sans.woff) format('woff');
+  src:  local('PT Sans'), local('PTSans-Regular') format('woff');
 }
 
 body {
@@ -11,8 +11,6 @@ body {
   font-size: 17px;
 
   color: #333;
-
-  background: url(../img/groovepaper.png) repeat top left;
 }
 
 h1, h2, h3, h4, h5, h6 {

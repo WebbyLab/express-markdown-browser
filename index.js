@@ -24,11 +24,12 @@ marked.setOptions({
 
 module.exports = function(args){
     var dir = args.path;
+    var documentDirs = {};
     if(!dir) throw "Path required!";
 
     return function(req, res, next){
-        if ((/\.md/).test(req.url)){
-            fs.readFile(dir + req.url, 'utf8', function(err, data){
+        if ( documentDirs[req.url] ){
+            fs.readFile(documentDirs[req.url], 'utf8', function(err, data){
                 if(err) return next();
                 marked(data, function (err, content) {
                     if (err) throw err;
@@ -49,7 +50,8 @@ module.exports = function(args){
                     var pathRe = new RegExp(dir);
                     var point  = point.replace(pathRe, "");
                     if(  (/.md/).test(point) ){
-                        pointer.set(obj, point.replace(/\.md/, ""), point);
+                        pointer.set(obj, point.replace(/\.md/, ""), point.replace(/\//, ""));
+                        documentDirs[point] = dir + point;
                     }
                 });
                 return obj;
