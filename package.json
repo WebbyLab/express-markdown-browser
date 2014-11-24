@@ -8,10 +8,11 @@
   "main": "./index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:siavolt/express-markdown-browser.git"
+    "url": "git@github.com:WebbyLab/express-markdown-browser.git"
   },
-  "devDependencies": {
+  "dependencies": {
     "marked":       "*",
-    "highlight.js": "*"
+    "highlight.js": "*",
+    "q-io":         "*"
   }
 }

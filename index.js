@@ -1,8 +1,12 @@
 'use strict';
 
-var marked    = require('marked');
 var fs        = require('fs');
+var qfs       = require("q-io/fs");
+var marked    = require('marked');
 var highlight = require("highlight.js");
+var pointer   = require("json-pointer");
+
+var css = fs.readFileSync(__dirname + "/style/def.css", 'utf8');
 
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -21,44 +25,35 @@ marked.setOptions({
 module.exports = function(args){
     var dir = args.path;
     if(!dir) throw "Path required!";
-    var css = fs.readFileSync(__dirname + "/style/def.css", 'utf8');
 
     return function(req, res, next){
-
         if ((/\.md/).test(req.url)){
-            var md;
-            try {
-                md = fs.readFileSync("." + req.url, 'utf8');
-            } catch(e) {
-                return next();
-            }
-            marked(md, function (err, content) {
-                if (err) throw err;
-                res.send("<head><style>"+css+"</style></head>"+content);
+            fs.readFile(dir + req.url, 'utf8', function(err, data){
+                if(err) return next();
+                marked(data, function (err, content) {
+                    if (err) throw err;
+                    res.send("<head><style>"+css+"</style></head>"+content);
+                });
             });
         } else {
             var url = req.protocol + '://' + req.get('Host');
-            res.send( "<head><style>"+css+"</style></head>" + renderList(walk(dir), "Specifications", url));
+            walk(dir).then(function(list){
+                res.send( "<head><style>"+css+"</style></head>" + renderList(list , "Specifications", url));
+            });
         }
 
-        function walk(dir, prefix){
-            if(!prefix) prefix = dir.replace(/.*\//, "");
-            var filesTree = {};
-            var files;
-            try {
-                files = fs.readdirSync(dir);
-            } catch(e) {
-                return next();
-            }
-            for (var i = 0; i < files.length; i++){
-                if ( !files[i].match(/\./g) ){
-                    filesTree[files[i]] = walk(dir + "/" + files[i], prefix + "/" + files[i] );
-                } else {
-                    filesTree[files[i]] = prefix + "/" + files[i] ;
-                }
-            }
-
-            return filesTree;
+        function walk(dir){
+            return qfs.listTree(dir).then(function(data){
+                var obj = {};
+                data.map(function(point){
+                    var pathRe = new RegExp(dir);
+                    var point  = point.replace(pathRe, "");
+                    if(  (/.md/).test(point) ){
+                        pointer.set(obj, point.replace(/\.md/, ""), point);
+                    }
+                });
+                return obj;
+            });
         }
 
         function renderList(list, name, url){

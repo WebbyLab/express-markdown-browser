@@ -1,4 +1,9 @@
-@import url(//fonts.googleapis.com/css?family=PT+Sans);
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'), url(fonts/PT_Sans.woff) format('woff');
+}
 
 body {
   padding:50px;
