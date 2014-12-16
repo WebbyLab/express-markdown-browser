@@ -2,6 +2,9 @@
   "name": "express-markdown-browser",
   "version": "0.0.1",
   "description": "",
+  "scripts": {
+    "test": "TEST_MODE=1 mocha --timeout 5000 --reporter spec --ui qunit tests/*.js"
+  },
   "author": {
     "name": "webbylab"
   },
@@ -14,5 +17,10 @@
     "marked":       "*",
     "highlight.js": "*",
     "q-io":         "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "express": "*"
   }
 }
