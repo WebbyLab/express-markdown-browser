@@ -5,7 +5,7 @@ var qfs       = require("q-io/fs");
 var marked    = require('marked');
 var highlight = require("highlight.js");
 var pointer   = require("json-pointer");
-
+var Q         = require("q");
 var css = fs.readFileSync(__dirname + "/style/def.css", 'utf8');
 
 marked.setOptions({
@@ -24,37 +24,41 @@ marked.setOptions({
 
 module.exports = function(args){
     var dir = args.path;
-    var documentDirs = {};
-    if(!dir) throw "Path required!";
-
+    var allowedFilesPaths;
+    var list;
+    if (!dir) throw "Path required!";
     return function(req, res, next){
-        if ( documentDirs[req.url] ){
-            fs.readFile(documentDirs[req.url], 'utf8', function(err, data){
-                if(err) return next();
-                marked(data, function (err, content) {
-                    if (err) throw err;
-                    res.send("<head><style>"+css+"</style></head>"+content);
+
+        init().then(function(){
+            if ( allowedFilesPaths[req.query.page] ){
+                fs.readFile(allowedFilesPaths[req.query.page], 'utf8', function(err, data){
+                    if (err) return next();
+                    marked(data, function (err, content) {
+                        if (err) throw err;
+                        res.send("<head><style>"+css+"</style></head>"+content);
+                    });
                 });
-            });
-        } else {
-            var url = req.protocol + '://' + req.get('Host');
-            walk(dir).then(function(list){
+            } else {
+                var url = req.protocol + '://' + req.get('Host') + req.originalUrl.replace(/\?.*/, '');
                 res.send( "<head><style>"+css+"</style></head>" + renderList(list , "Specifications", url));
-            });
-        }
+            }
+        });
 
         function walk(dir){
+
+            allowedFilesPaths = {};
+            list = {};
+
             return qfs.listTree(dir).then(function(data){
-                var obj = {};
                 data.map(function(point){
                     var pathRe = new RegExp(dir);
-                    var point  = point.replace(pathRe, "");
+                    point      = point.replace(pathRe, "");
                     if(  (/.md/).test(point) ){
-                        pointer.set(obj, point.replace(/\.md/, ""), point.replace(/\//, ""));
-                        documentDirs[point] = dir + point;
+                        var purePoint = point.replace(/\.md/, "");
+                        pointer.set(list, purePoint, purePoint);
+                        allowedFilesPaths[purePoint] = dir + point;
                     }
                 });
-                return obj;
             });
         }
 
@@ -64,11 +68,19 @@ module.exports = function(args){
                 if ( typeof list[key] == "object" ){
                     html += renderList(list[key], key, url);
                 } else {
-                    html += '<li><a href="'+url+'/'+list[key]+'">' + key.replace(/\..*/, "") + "</a></li>";
+                    html += '<li><a href="'+url+'?page='+list[key]+'">' + key.replace(/\..*/, "") + "</a></li>";
                 }
             }
             html += "</ul>";
             return html;
+        }
+
+        function init(){
+            if ( !allowedFilesPaths || !list ){
+                return walk(dir);
+            } else {
+                return Q();
+            }
         }
     };
 };
