@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/WebbyLab/express-markdown-browser.svg?branch=master)](https://travis-ci.org/WebbyLab/express-markdown-browser)
+
 #Express-Markdown-Browser
 
 >Express middleware for viewing documentation in markdown
