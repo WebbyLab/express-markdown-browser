@@ -5,7 +5,7 @@
 ## Install
 
 ``` bash
-npm install marked --save
+npm install express-markdown-browser --save
 ```
 
 ## Usage
