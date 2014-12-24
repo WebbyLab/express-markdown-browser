@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "highlight.js": "*",
+    "json-pointer": "^0.2.2",
     "marked": "*",
+    "q": "^1.1.2",
     "q-io": "*",
     "request": "^2.51.0"
   },
