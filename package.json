@@ -14,9 +14,10 @@
     "url": "git@github.com:WebbyLab/express-markdown-browser.git"
   },
   "dependencies": {
-    "marked":       "*",
     "highlight.js": "*",
-    "q-io":         "*"
+    "marked": "*",
+    "q-io": "*",
+    "request": "^2.51.0"
   },
   "devDependencies": {
     "mocha": "*",
