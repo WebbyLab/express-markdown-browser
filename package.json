@@ -1,12 +1,14 @@
 {
   "name": "express-markdown-browser",
   "version": "0.0.1",
-  "description": "",
+  "homepage": "https://github.com/WebbyLab/express-markdown-browser",
+  "description": "Express middleware for viewing documentation in markdown from browser",
   "scripts": {
     "test": "TEST_MODE=1 mocha --timeout 5000 --reporter spec --ui qunit tests/*.js"
   },
   "author": {
-    "name": "webbylab"
+    "name": "webbylab",
+    "url": "http://webbylab.com"
   },
   "main": "./index.js",
   "repository": {
