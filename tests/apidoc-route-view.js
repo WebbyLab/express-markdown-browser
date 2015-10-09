@@ -34,8 +34,8 @@ test('Positive: Specification list.', function(done) {
 
         assert.ok(moviesRegExp.test(body));
         assert.ok(usersRegExp.test(body));
-        assert.ok((/http:\/\/127\.0\.0\.1:8888\/apidoc\?page=\/movies\/create/).test(body));
-        assert.ok((/http:\/\/127\.0\.0\.1:8888\/apidoc\?page=\/users\/create/).test(body));
+        assert.ok((/apidoc\?page=\/movies\/create/).test(body));
+        assert.ok((/apidoc\?page=\/users\/create/).test(body));
 
         link = body.match(/href=[\'"]?([^\'" >]+)/)[1];
 
@@ -44,7 +44,7 @@ test('Positive: Specification list.', function(done) {
 });
 
 test('Positive: Check link with md file', function(done) {
-    request.get( link, function optionalCallback(err, httpResponse, body) {
+    request.get( "http://127.0.0.1:" + port + link, function optionalCallback(err, httpResponse, body) {
         var mainTitleRegExp = new RegExp('<h1 id="movies-create">Movies Create</h1>');
         var titleRegExp     = new RegExp('<span class="hljs-string">"Scarface"</span>');
         var yearRegExp      = new RegExp('<span class="hljs-number">1983</span>');
