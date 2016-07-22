@@ -1,6 +1,7 @@
 'use strict';
 
 var fs        = require('fs');
+var path      = require('path');
 var qfs       = require("q-io/fs");
 var marked    = require('marked');
 var highlight = require("highlight.js");
@@ -55,6 +56,12 @@ module.exports = function(args){
                     point      = point.replace(pathRe, "");
                     if(  (/.md/).test(point) ){
                         var purePoint = point.replace(/\.md/, "");
+
+                        if (purePoint.indexOf('\\') !== -1) {
+                            purePoint = purePoint.replace(/\\/g, '/')
+                            purePoint = purePoint.replace(/[A-z]:/g, '')
+                        }
+
                         pointer.set(list, purePoint, purePoint);
                         allowedFilesPaths[purePoint] = dir + point;
                     }
@@ -77,7 +84,7 @@ module.exports = function(args){
 
         function init(){
             if ( !allowedFilesPaths || !list ){
-                return walk(dir);
+                return walk(dir).catch(err => console.error(err));
             } else {
                 return Q();
             }
