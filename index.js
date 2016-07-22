@@ -84,7 +84,7 @@ module.exports = function(args){
 
         function init(){
             if ( !allowedFilesPaths || !list ){
-                return walk(dir).catch(err => console.error(err));
+                return walk(dir).catch(function (err) { console.error(err) });
             } else {
                 return Q();
             }
